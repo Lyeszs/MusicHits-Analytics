@@ -1,5 +1,17 @@
-dataset.csv
-__pycache__/
+# Variables d'environnement
 .env
-archives\billboard_raw.csv
-archives\billboard_raw.csv
+$env:*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+
+# Données volumineuses
+*.csv
+dataset_final.json
+
+# IDE
+.vscode/

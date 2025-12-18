@@ -17,6 +17,8 @@ python etl2.py : Analyse et enrichissement des données via l'IA Gemini.
 
 python etl.py : Extraction finale et consolidation via l'API Spotify.
 
+neamoins vous trouverez dans le dossier archives toutes les données nécessaires
+
 3. Notebooks d'analyse et de prédiction
 Le projet inclut deux notebooks Jupyter pour approfondir l'étude des données :
 
@@ -28,7 +30,6 @@ prediction.ipynb : Ce fichier contient les modèles et les analyses prédictives
 L'utilisation de la fonction fetch() pour charger les données JSON impose l'utilisation d'un serveur local :
 
 Utilise l'extension LiveServer sur VS Code.
-
 Ou lance la commande suivante à la racine du projet : python -m http.server 8000.
 
 Technologies & Bibliothèques
