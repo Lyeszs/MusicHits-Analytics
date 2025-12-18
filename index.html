@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualisation de nos hits</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+
+    <style>
+        .year-display {
+            font-size: 8rem;
+            font-weight: 800;
+            color: rgba(29, 185, 84, 0.08);
+            position: absolute;
+            right: 40px;
+            bottom: 20px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .chart-container-rel { position: relative; overflow: hidden; }
+
+        .timeline-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #yearRange { width: 200px; cursor: pointer; accent-color: #1db954; }
+
+        #playBtn {
+            background: #1db954;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .chart-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            z-index: 1;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+    <span>M</span>usicData
+    <span class="team-names">Lyes Elyas Japhet Derick</span>
+</div>
+        <ul class="nav-links">
+            <li><a href="index.html" class="active">Accueil</a></li>
+            <li><a href="geo.html">Géographie</a></li>
+            <li><a href="timeline.html">Durée</a></li>
+            <li><a href="genres.html">Genres</a></li>
+            <li><a href="top.html">Top 50</a></li>
+          
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <header class="hero-section">
+            <h1>Exploration des Hits Mondiaux (1980-2022)</h1>
+            <p>Une analyse data-driven de plus de 40 ans de musique populaire.</p>
+        </header>
+
+        <section class="study-framework">
+
+            <div class="problem-statement">
+                <h2>Problématique</h2>
+                <p>
+                    Comment le profil commercial du 'Hit' a-t-il évolué entre les années 1980
+                    et  2022 , et quels sont les indicateurs clés de
+                    succès qui ont persisté ?
+                </p>
+            </div>
+
+            <div class="hypothesis-grid">
+
+                <div class="hypo-card">
+                    <div class="hypo-header">
+                        <span class="page-tag">Page 1 : Géographie</span>
+                        <h3>D'où vient le son ?</h3>
+                    </div>
+                    <p class="question"><strong>Q :</strong> la légende Américaine est-elle toujours absolue ou
+                        assiste-t-on à une diversification des origines musicales ?</p>
+                    <p class="hypothesis"><strong>H :</strong> On observe une percée significative des artistes
+                        européens et sud-américains depuis 2015.</p>
+                </div>
+
+                <div class="hypo-card">
+                    <div class="hypo-header">
+                        <span class="page-tag">Page 2 : Durée</span>
+                        <h3>Le Temps & L'Émotion</h3>
+                    </div>
+                    <p class="question"><strong>Q :</strong> La musique est-elle devenue plus rapide ou plus triste face
+                        aux crises mondiales ?</p>
+                    <p class="hypothesis"><strong>H :</strong> Le tempo augmente, mais la "Valence" (positivité) chute,
+                        reflétant une époque plus anxieuse.</p>
+                </div>
+
+                <div class="hypo-card">
+                    <div class="hypo-header">
+                        <span class="page-tag">Page 3 : Genres</span>
+                        <h3>La Guerre des Styles</h3>
+                    </div>
+                    <p class="question"><strong>Q :</strong> La Pop conserve-t-elle son trône face à l'émergence des
+                        musiques urbaines ?</p>
+                    <p class="hypothesis"><strong>H :</strong> La Pop décline au profit du Hip-Hop et de la Dance music
+                        qui saturent les charts.</p>
+                </div>
+                 
+
+            </div>
+        </section>
+
+        <hr class="divider">
+
+        <div class="kpi-grid" style="margin-bottom: 40px;">
+            <div class="card kpi-card">
+                <h3>Total Chansons</h3>
+                <div class="kpi-value" id="total-songs">...</div>
+                <div class="kpi-sub">Analysées</div>
+            </div>
+            <div class="card kpi-card">
+                <h3>Artistes Uniques</h3>
+                <div class="kpi-value" id="total-artists">-</div>
+                <div class="kpi-sub">Dans la base</div>
+            </div>
+            <div class="card kpi-card">
+                <h3>Top Région</h3>
+                <div class="kpi-value highlight" id="top-region">-</div>
+                <div class="kpi-sub">Dominante</div>
+            </div>
+            <div class="card kpi-card">
+                <h3>Durée Moyenne</h3>
+                <div class="kpi-value" id="avg-duration">-</div>
+                <div class="kpi-sub">Minutes</div>
+            </div>
+        </div>
+
+        <div class="card chart-card full-width chart-container-rel" style="margin-bottom: 30px;">
+            <div class="chart-header-flex">
+                <div>
+                    <h3>Top 10 Genres par Popularité Moyenne</h3>
+                    <p class="kpi-sub">L'impact commercial réel de chaque style musical</p>
+                </div>
+                <div class="timeline-controls">
+                    <button id="playBtn">▶</button>
+                    <label for="yearRange">Année : <span id="yearValue" style="color: #1db954;">1980</span></label>
+                    <input type="range" id="yearRange" min="1980" max="2022" value="1980">
+                </div>
+            </div>
+            <div id="genre-race-chart" style="width: 100%; height: 500px;"></div>
+            <div id="current-year-bg" class="year-display">1980</div>
+        </div>
+
+    </div>
+
+    <script src="js/index.js"></script>
+
+</body>
+
+</html>

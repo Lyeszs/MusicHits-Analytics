@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Évolution - MusicData</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script> <style>
+        /* Ajustement pour que le dashboard ne passe pas sous la navbar fixe */
+        .wrapper { margin-top: 80px !important; } 
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+    <span>M</span>usicData
+    <span class="team-names">Lyes Elyas Japhet Derick</span>
+</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="geo.html">Géographie</a></li>
+            <li><a href="timeline.html" class="active">Évolution</a></li>
+            <li><a href="genres.html">Genres</a></li>
+            <li><a href="top.html">Top 50</a></li>
+        </ul>
+    </nav>
+
+    <div class="wrapper">
+        
+        <h1 style="color: #fff; margin-bottom: 30px; border-left: 6px solid #1db954; padding-left: 15px;">
+            Analyse Approfondie : La Chute de la Durée (1980-2023)
+        </h1>
+
+        <div class="chart-section">
+            <h2>1. Analyse Macro : Durée Moyenne & Événements</h2>
+            
+            <div class="controls" style="border-left-color: #546E7A;">
+                <div class="control-group">
+                    <div class="label-row">
+                        <label>SEUIL DE SÉPARATION</label>
+                        <span id="dispLinePop" class="value-display">70</span>
+                    </div>
+                    <input type="range" class="single-slider" id="sliderLinePop" min="0" max="100" value="70">
+                </div>
+                <button id="scaleBtn" class="btn-action" style="align-self: center;">ZOOM AUTO</button>
+            </div>
+
+            <div style="height: 350px;">
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-label">Moyenne Sélection</div>
+                <div class="stat-value" id="statAvg">--:--</div>
+            </div>
+            <div class="stat-card" style="border-left-color: #FEB019;">
+                <div class="stat-label">Info Utile 1</div>
+                <div class="stat-placeholder">remplir avec info utile</div>
+            </div>
+            <div class="stat-card" style="border-left-color: #FF4560;">
+                <div class="stat-label">Info Utile 2</div>
+                <div class="stat-placeholder">remplir avec info utile</div>
+            </div>
+        </div>
+
+        <div class="chart-section">
+            <h2>2. Analyse Micro : Distribution & Recherche</h2>
+            <div style="font-size: 0.85em; color: #888; margin-bottom: 10px; margin-top: -10px;">
+                <i style="color: #00E396;">Astuce :</i> Cliquez sur un point pour écouter le son sur YouTube.
+            </div>
+            
+            <div class="controls">
+                <div class="control-group">
+                    <div class="label-row">
+                        <label>SEUIL COULEUR (Vert/Rouge)</label>
+                        <span id="dispScatterPop" class="value-display">70</span>
+                    </div>
+                    <input type="range" class="single-slider" id="sliderScatterPop" min="0" max="100" value="70">
+                </div>
+
+                <div class="control-group">
+                    <div class="label-row">
+                        <label>PLAGE DE DURÉE (min - max)</label>
+                        <span id="dispScatterRange" class="value-display">0:00 - 10:00</span>
+                    </div>
+                    <div class="range-slider-container">
+                        <div class="slider-track-bg"></div>
+                        <div class="slider-track-fill" id="trackFill"></div>
+                        <input type="range" id="rangeMin" min="0" max="10" step="0.1" value="0">
+                        <input type="range" id="rangeMax" min="0" max="10" step="0.1" value="10">
+                    </div>
+                </div>
+
+                <div class="control-group" style="flex: 0 0 auto; min-width: auto;">
+                     <div class="label-row"><label>PERFORMANCE</label></div>
+                     <div class="checkbox-wrapper">
+                         <input type="checkbox" id="optCheck" checked>
+                         <label for="optCheck">Activer Optimisation</label>
+                     </div>
+                </div>
+            </div>
+
+            <div id="perfInfo" style="text-align: right; color: #555; font-size: 0.8rem; margin-top: -15px; margin-bottom: 5px;"></div>
+            
+            <div style="height: 500px;">
+                <canvas id="scatterChart"></canvas>
+            </div>
+        </div>
+        
+    </div> <script src="js/timeline.js"></script>
+
+</body>
+</html>

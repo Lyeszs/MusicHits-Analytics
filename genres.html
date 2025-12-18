@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genres - MusicData</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+    <span>M</span>usicData
+    <span class="team-names">Lyes Elyas Japhet Derick</span>
+</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="geo.html">Géographie</a></li>
+            <li><a href="timeline.html">Évolution</a></li>
+            <li><a href="genres.html" class="active">Genres</a></li>
+            <li><a href="top.html">Top 50</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <header class="hero-section">
+            <h1>Analyse des Genres</h1>
+            <p>Quel style domine les charts ? Décryptage des tendances musicales de 1980 à 2022.</p>
+        </header>
+
+        <div class="filter-container">
+            <div class="filter-group">
+                <label>Zone Géographique</label>
+                <select id="regionSelect">
+                    <option value="all">Monde entier</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Année</label>
+                <select id="yearSelect">
+                    <option value="all">Toutes les années (1980-2022)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="charts-container-grid">
+            
+            <div class="card chart-card">
+                <h3>Signature Acoustique (Top 3 Genres)</h3>
+                <div id="radarGenre"></div>
+                <div class="analysis-box">
+                    <p><strong>Analyse de la Signature :</strong> Comparaison des 3 genres les plus prolifiques. Un genre "dansant" et "énergique" a souvent plus de chances de percer qu'un genre purement acoustique.</p>
+                </div>
+            </div>
+
+            <div class="card chart-card">
+                <h3>Volume de Hits (Nombre > 75 Pop)</h3>
+                <div id="heatmapGenre"></div>
+                <div class="analysis-box">
+                    <p><strong>Qui crée les stars ?</strong> Ce graphique montre le nombre exact de titres qui sont devenus des "Hits" (Popularité > 75). C'est le volume brut de succès.</p>
+                </div>
+            </div>
+
+            <div class="card chart-card full-width">
+                <h3>Poids du Catalogue (Volume)</h3>
+                <div id="treemapGenre"></div>
+                <div class="analysis-box">
+                    <p><strong>Diversité Musicale :</strong> La surface de chaque case représente le nombre total de morceaux produits. On visualise ici la domination massive de certains genres (Pop, Rock) sur le reste de l'industrie.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/genres.js"></script>
+</body>
+</html>
