@@ -6,19 +6,31 @@
     <title>Genres - MusicData</title>
     
     <link rel="stylesheet" href="css/style.css">
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <style>
+        .filters-section {
+            display: flex; gap: 20px; margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.05); padding: 20px;
+            border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+        }
+        .filter-group { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+        .filter-group label { color: #1db954; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+        select { background: #121212; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 6px; outline: none; }
+        
+        /* Conteneur pour éviter les bugs d'affichage */
+        .chart-container-box { min-height: 350px; }
+    </style>
 </head>
 <body>
-
     <nav class="navbar">
         <div class="logo">
-    <span>M</span>usicData
-    <span class="team-names">Lyes Elyas Japhet Derick</span>
-</div>
+            <span>M</span>usicData
+            <span class="team-names">Lyes Elyas Japhet Derick</span>
+        </div>
         <ul class="nav-links">
             <li><a href="index.html">Accueil</a></li>
             <li><a href="geo.html">Géographie</a></li>
@@ -30,52 +42,41 @@
 
     <div class="container">
         <header class="hero-section">
-            <h1>Analyse des Genres</h1>
-            <p>Quel style domine les charts ? Décryptage des tendances musicales de 1980 à 2022.</p>
+            <h1>La Guerre des Genres</h1>
+            <p>Comparaison Qualité vs Quantité sur 40 ans de musique.</p>
         </header>
 
-        <div class="filter-container">
+        <div class="filters-section">
             <div class="filter-group">
-                <label>Zone Géographique</label>
-                <select id="regionSelect">
-                    <option value="all">Monde entier</option>
-                </select>
+                <label>Région</label>
+                <select id="regionSelect"><option value="all">Monde Entier</option></select>
             </div>
             <div class="filter-group">
-                <label>Année</label>
-                <select id="yearSelect">
-                    <option value="all">Toutes les années (1980-2022)</option>
-                </select>
+                <label>Période</label>
+                <select id="yearSelect"><option value="all">Toute la période (1980-2022)</option></select>
             </div>
         </div>
 
-        <div class="charts-container-grid">
-            
-            <div class="card chart-card">
-                <h3>Signature Acoustique (Top 3 Genres)</h3>
-                <div id="radarGenre"></div>
-                <div class="analysis-box">
-                    <p><strong>Analyse de la Signature :</strong> Comparaison des 3 genres les plus prolifiques. Un genre "dansant" et "énergique" a souvent plus de chances de percer qu'un genre purement acoustique.</p>
-                </div>
+        <div class="card chart-card full-width">
+            <div class="chart-header-flex">
+                <h3>1. Comparatif Qualitatif (Popularité Moyenne)</h3>
             </div>
-
-            <div class="card chart-card">
-                <h3>Volume de Hits (Nombre > 75 Pop)</h3>
-                <div id="heatmapGenre"></div>
-                <div class="analysis-box">
-                    <p><strong>Qui crée les stars ?</strong> Ce graphique montre le nombre exact de titres qui sont devenus des "Hits" (Popularité > 75). C'est le volume brut de succès.</p>
-                </div>
+            <div id="genreAvgChart" class="chart-container-box"></div>
+            <div class="analysis-box">
+                <p><strong>Performance pure :</strong> Les genres qui obtiennent les meilleures notes moyennes (Score sur 100).</p>
             </div>
-
-            <div class="card chart-card full-width">
-                <h3>Poids du Catalogue (Volume)</h3>
-                <div id="treemapGenre"></div>
-                <div class="analysis-box">
-                    <p><strong>Diversité Musicale :</strong> La surface de chaque case représente le nombre total de morceaux produits. On visualise ici la domination massive de certains genres (Pop, Rock) sur le reste de l'industrie.</p>
-                </div>
-            </div>
-
         </div>
+
+        <div class="card chart-card full-width">
+            <div class="chart-header-flex">
+                <h3>2. Comparatif Quantitatif (Volume Hits)</h3>
+            </div>
+            <div id="genreHitsChart" class="chart-container-box"></div>
+            <div class="analysis-box">
+                <p><strong>Puissance de feu :</strong> Nombre de titres classés "Hits" (>75 popularité).</p>
+            </div>
+        </div>
+
     </div>
 
     <script src="js/genres.js"></script>

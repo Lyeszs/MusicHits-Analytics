@@ -6,22 +6,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         const regionSelect = document.getElementById('regionSelect');
         const yearSelect = document.getElementById('yearSelect');
 
-        // --- 1. FILTRES ---
-        const regions = [...new Set(data.map(d => d.region))].filter(r => r && r !== "Inconnu").sort();
-        const years = [...new Set(data.map(d => parseInt(d.year)))]
-            .filter(y => y >= 1980 && y <= 2022)
-            .sort((a,b) => b-a);
+        // --- CONFIGURATION ---
+        const GREEN_GRADIENT = [
+            '#022c22', '#064e3b', '#065f46', '#047857', '#059669', 
+            '#10b981', '#22c55e', '#4ade80', '#5eead4', '#6ee7b7'
+        ];
+
+        // Remplissage Filtres
+        const regions = [...new Set(data.map(d => d.region))].filter(r => r && r !== "Inconnu" && r !== "Reste du Monde").sort();
+        const years = [...new Set(data.map(d => parseInt(d.year)))].filter(y => y >= 1980 && y <= 2022).sort((a,b) => b-a);
 
         regions.forEach(r => regionSelect.add(new Option(r, r)));
         years.forEach(y => yearSelect.add(new Option(y, y)));
 
-        let radarChart, efficiencyChart, treemapChart;
+        let avgChart, hitsChart;
 
-        // --- 2. RENDER ---
+        // --- MOTEUR DE RENDU ---
         const render = () => {
             const selRegion = regionSelect.value;
             const selYear = yearSelect.value;
 
+            // Filtrage
             const filtered = data.filter(d => {
                 const yr = parseInt(d.year);
                 const matchRegion = (selRegion === 'all' || d.region === selRegion);
@@ -31,96 +36,58 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (filtered.length === 0) return;
 
-            // Agrégation
+            // Calculs
             const genres = {};
             filtered.forEach(d => {
                 const g = d.track_genre;
-                if (!genres[g]) genres[g] = { count: 0, hits: 0, dance: 0, energy: 0, popSum: 0 };
-                
+                if (!genres[g]) genres[g] = { count: 0, hits: 0, popSum: 0 };
                 genres[g].count++;
                 genres[g].popSum += d.popularity;
-                genres[g].dance += (d.danceability || 0);
-                genres[g].energy += (d.energy || 0);
-                
-                // DEFINITION D'UN HIT : > 75 de popularité
                 if (d.popularity > 75) genres[g].hits++;
             });
 
-            const genreArr = Object.keys(genres).map(key => {
-                const obj = genres[key];
-                return {
-                    name: key,
-                    count: obj.count,
-                    hits: obj.hits, // ON GARDE JUSTE LE NOMBRE
-                    avgPop: obj.popSum / obj.count,
-                    dance: (obj.dance / obj.count).toFixed(2),
-                    energy: (obj.energy / obj.count).toFixed(2)
-                };
-            }).filter(g => g.count > 10); 
+            const genreArr = Object.keys(genres).map(key => ({
+                name: key,
+                count: genres[key].count,
+                hits: genres[key].hits,
+                avgPop: genres[key].popSum / genres[key].count
+            })).filter(g => g.count > 5);
 
-            // --- GRAPHE 1 : RADAR (Top 3 Volume) ---
-            const top3Volume = [...genreArr].sort((a, b) => b.count - a.count).slice(0, 3);
-            const radarOpts = {
-                series: top3Volume.map(g => ({
-                    name: g.name,
-                    data: [g.dance * 100, g.energy * 100, g.avgPop] 
-                })),
-                chart: { type: 'radar', height: 350, toolbar: {show:false}, fontFamily: 'Inter' },
-                xaxis: { categories: ['Dansabilité', 'Énergie', 'Popularité Moyenne'] },
-                stroke: { width: 2 },
-                fill: { opacity: 0.2 },
-                markers: { size: 4 },
-                colors: ['#1db954', '#ffffff', '#b3b3b3'], 
-                theme: { mode: 'dark' }
-            };
-            if(radarChart) radarChart.destroy();
-            radarChart = new ApexCharts(document.querySelector("#radarGenre"), radarOpts);
-            radarChart.render();
-
-            // --- GRAPHE 2 : VOLUME HITS (Plus de %) ---
-            // On trie par nombre de HITS
-            const topHits = [...genreArr].sort((a, b) => b.hits - a.hits).slice(0, 10);
-            
-            const efficiencyOpts = {
-                series: [{ name: 'Nombre de Hits', data: topHits.map(g => g.hits) }],
+            // 1. CHART AVG (Barres Horizontales)
+            const topAvg = [...genreArr].sort((a, b) => b.avgPop - a.avgPop).slice(0, 10);
+            const avgOpts = {
+                series: [{ name: 'Score', data: topAvg.map(g => parseFloat(g.avgPop.toFixed(1))) }],
                 chart: { type: 'bar', height: 350, toolbar: {show:false}, fontFamily: 'Inter' },
-                plotOptions: { bar: { borderRadius: 4, horizontal: true, barHeight: '60%', distributed: true } },
-                colors: ['#052e16', '#0a4a22', '#0f662e', '#14823a', '#1db954', '#40c26e', '#63cb88', '#85d4a2', '#a8ddbc', '#cae6d6'],
-                dataLabels: {
-                    enabled: true,
-                    formatter: (val) => val + " titres", // Affiche "XX titres"
-                    style: { colors: ['#fff'] }
-                },
-                xaxis: { categories: topHits.map(g => g.name), labels: { style: { colors: '#b3b3b3' } } },
-                yaxis: { labels: { style: { colors: '#fff', fontSize: '13px', fontWeight: 600 } } },
-                tooltip: { theme: 'dark', y: { formatter: (val) => val + " titres classés Hits" } },
-                theme: { mode: 'dark' },
-                grid: { show: false }
+                plotOptions: { bar: { horizontal: true, barHeight: '65%', distributed: true, borderRadius: 3, dataLabels: { position: 'right' } } },
+                colors: GREEN_GRADIENT, 
+                dataLabels: { enabled: true, textAnchor: 'start', style: { fontSize: '12px', colors: ['#fff'] }, formatter: (val) => val + "/100", offsetX: 5 },
+                xaxis: { categories: topAvg.map(g => g.name), labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false } },
+                yaxis: { labels: { style: { colors: '#fff', fontSize: '13px', fontWeight: 'bold' }, maxWidth: 180 } },
+                legend: { show: false }, theme: { mode: 'dark' }, grid: { show: false }
             };
-            if(efficiencyChart) efficiencyChart.destroy();
-            efficiencyChart = new ApexCharts(document.querySelector("#heatmapGenre"), efficiencyOpts);
-            efficiencyChart.render();
+            if(avgChart) avgChart.destroy();
+            if(document.querySelector("#genreAvgChart")) {
+                avgChart = new ApexCharts(document.querySelector("#genreAvgChart"), avgOpts);
+                avgChart.render();
+            }
 
-            // --- GRAPHE 3 : TREEMAP (Sans pourcentage) ---
-            const topMarket = [...genreArr].sort((a, b) => b.count - a.count).slice(0, 20);
-            const treemapOpts = {
-                series: [{ 
-                    data: topMarket.map(g => ({ x: g.name, y: g.count })) 
-                }],
-                chart: { type: 'treemap', height: 350, toolbar: {show:false}, fontFamily: 'Inter' },
-                colors: ['#1db954'],
-                theme: { mode: 'dark' },
-                dataLabels: {
-                    style: { fontSize: '14px', fontWeight: 'bold' },
-                    formatter: function(text, op) {
-                        return [text, op.value]; // Nom + Volume
-                    }
-                },
-                plotOptions: { treemap: { distributed: true, enableShades: true } }
+            // 2. CHART HITS (Barres Horizontales)
+            const topHits = [...genreArr].sort((a, b) => b.hits - a.hits).slice(0, 10);
+            const hitsOpts = {
+                series: [{ name: 'Hits', data: topHits.map(g => g.hits) }],
+                chart: { type: 'bar', height: 350, toolbar: {show:false}, fontFamily: 'Inter' },
+                plotOptions: { bar: { horizontal: true, barHeight: '65%', distributed: true, borderRadius: 3, dataLabels: { position: 'right' } } },
+                colors: GREEN_GRADIENT,
+                dataLabels: { enabled: true, textAnchor: 'start', style: { fontSize: '12px', colors: ['#fff'] }, offsetX: 5 },
+                xaxis: { categories: topHits.map(g => g.name), labels: { show: false }, axisBorder: { show: false }, axisTicks: { show: false } },
+                yaxis: { labels: { style: { colors: '#fff', fontSize: '13px', fontWeight: 'bold' }, maxWidth: 180 } },
+                legend: { show: false }, theme: { mode: 'dark' }, grid: { show: false }
             };
-            if(treemapChart) treemapChart.destroy();
-            treemapChart = new ApexCharts(document.querySelector("#treemapGenre"), treemapOpts);
-            treemapChart.render();
+            if(hitsChart) hitsChart.destroy();
+            if(document.querySelector("#genreHitsChart")) {
+                hitsChart = new ApexCharts(document.querySelector("#genreHitsChart"), hitsOpts);
+                hitsChart.render();
+            }
         };
 
         [regionSelect, yearSelect].forEach(s => s.addEventListener('change', render));
