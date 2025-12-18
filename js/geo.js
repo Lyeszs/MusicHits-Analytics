@@ -8,9 +8,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             d.year >= 1980 && 
             d.year <= 2022 && 
             d.region && 
-            d.region !== "Inconnu" &&
-            d.region !== "Reste du Monde" &&
-            d.region !== "Océanie" // <--- ON VIRE L'OCEANIE ICI
+            d.region !== "Inconnu" 
+            
         );
 
         // 2. IDENTIFIER LES REGIONS MAJEURES (Top 4 restant pour que ce soit lisible)

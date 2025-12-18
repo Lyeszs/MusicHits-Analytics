@@ -1,19 +1,25 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Géo-Analyse - MusicData</title>
-    
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <style>
-        .chart-card { min-height: 450px; } /* Un peu plus haut pour le Bar Chart */
+        .chart-card {
+            min-height: 450px;
+        }
+
+        /* Un peu plus haut pour le Bar Chart */
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="logo">
@@ -41,19 +47,26 @@
             </div>
             <div id="geoTrendChart"></div>
             <div class="analysis-box">
-                <p>Ce graphique compare la <strong>qualité commerciale moyenne</strong> des titres produits par chaque région. Il permet de voir si une région produit des "hits" plus puissants qu'une autre sur la durée.</p>
+                <p>Par ce graphiqe , on voit l'évolution de la popularité moyenne par région au fil du temps. On
+                    remarque
+                    que
+                    l'Amérique du Nord domine le classement de popularité moyenne des hits, suivie par l'Europe et
+                    l'Asie.
+                </p>
             </div>
         </div>
 
         <div class="card chart-card full-width">
             <div class="chart-header-flex">
-                <h3>2. Comparatif des Ingrédients (Barres)</h3>
+                <h3>2. Comparatif des facteurs d'influence par région</h3>
             </div>
-            <div id="geoBarChart"></div> <div class="analysis-box">
+            <div id="geoBarChart"></div>
+            <div class="analysis-box">
                 <p><strong>Lecture :</strong> Chaque groupe de barres représente une caractéristique.
-                <br>• <strong>Dansabilité & Énergie :</strong> Score sur 100.
-                <br>• <strong>Tempo :</strong> En BPM (Battements Par Minute).
-                <br>On compare ici directement qui produit la musique la plus rapide ou la plus énergique.</p>
+                    <br>• <strong>Dansabilité & Énergie :</strong> Score sur 100.
+                    <br>• <strong>Tempo :</strong> En BPM (Battements Par Minute).
+                    <br>On compare ici directement qui produit la musique la plus rapide ou la plus énergique.
+                </p>
             </div>
         </div>
 
@@ -61,4 +74,5 @@
 
     <script src="js/geo.js"></script>
 </body>
+
 </html>

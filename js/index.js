@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         calculerKPIs(data);
         initInteractiveGenreRace(data); // Version ECharts Fluide
         
-        // Assure-toi que ces fonctions existent dans ton fichier si tu les appelles
+      
         if(typeof afficherDuelADN === 'function') afficherDuelADN(data);
         if(typeof afficherTrajectoirePopularite === 'function') afficherTrajectoirePopularite(data);
 
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// --- KPIs (TON CODE EXACT) ---
+// --- KPIs  ---
 function calculerKPIs(data) {
     document.getElementById('total-songs').innerText = data.length.toLocaleString();
     const sacArtistes = new Set();
@@ -40,7 +40,7 @@ function calculerKPIs(data) {
     document.getElementById('avg-duration').innerText = `${Math.floor(moy/60)}:${Math.round(moy%60).toString().padStart(2,'0')}`;
 }
 
-// --- COURSE DYNAMIQUE (VERSION ECHARTS FLUIDE) ---
+// --- COURSE DYNAMIQUE ---
 function initInteractiveGenreRace(data) {
     const chartDom = document.getElementById('genre-race-chart');
     const myChart = echarts.init(chartDom);
@@ -112,7 +112,7 @@ function initInteractiveGenreRace(data) {
             },
             itemStyle: {
                 color: function(param) {
-                    // Ton dégradé de vert appliqué selon le rang visuel
+                    
                     const colors = [
                         '#b8e2cc', '#96d8b0', '#72ce93', '#4bc475', '#1db954',
                         '#248e48', '#1f7b3e', '#1a6835', '#15552b', '#104222'
